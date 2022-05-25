@@ -6,6 +6,13 @@ Tspec Structured Plain Embedded Commands is a simple specification for writing t
 
 * Runs your custom task on a 'tspec' file.
 * 'Run Spec' Codelens action on top of the file.
+* Format tables in document (using format document command).
+* 'Format' codelens on top of tables.
+
+## Known Issues
+
+* Format codelens on tables formats the entire document instead of just the table
+  under the codelens.
 
 ## Requirements
 
