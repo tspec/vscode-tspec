@@ -1,7 +1,7 @@
 {
   "name": "tspec-runner",
 	"displayName": "Tspec Runner",
-	"description": "Execute tspec files",
+	"description": "Execute Tspec files",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.67.0"
@@ -10,14 +10,15 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:tspec-runner.helloWorld"
+        "onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "tspec-runner.helloWorld",
-				"title": "Hello World"
+				"command": "tspec-runner.runSpec",
+				"category": "Tspec",
+				"title": "Run Specification"
 			}
 		],
 		"languages": [{
