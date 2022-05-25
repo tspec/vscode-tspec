@@ -1,8 +1,13 @@
 {
-  "name": "tspec-runner",
+	"name": "tspec-runner",
+	"publisher": "TspecOrg",
 	"displayName": "Tspec Runner",
 	"description": "Execute Tspec files",
 	"version": "0.0.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tspec/vscode-tspec-runner"
+	},
 	"engines": {
 		"vscode": "^1.67.0"
 	},
@@ -10,7 +15,7 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onStartupFinished"
+		"onStartupFinished"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -21,25 +26,35 @@
 				"title": "Run Specification"
 			}
 		],
-		"languages": [{
-            "id": "tspec",
-            "aliases": ["tspec", "tspec"],
-            "extensions": [".tspec",".tspec.md"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "tspec",
-            "scopeName": "text.html.markdown.tspec",
-            "path": "./syntaxes/tspec.tmLanguage.json"
-        }],
-        "configuration": {
-            "properties": {
-                "tspec-runner.enableCodeLens": {
-                    "type": "boolean",
-                    "default": true
-                }
-            }
-        }
+		"languages": [
+			{
+				"id": "tspec",
+				"aliases": [
+					"tspec",
+					"tspec"
+				],
+				"extensions": [
+					".tspec",
+					".tspec.md"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "tspec",
+				"scopeName": "text.html.markdown.tspec",
+				"path": "./syntaxes/tspec.tmLanguage.json"
+			}
+		],
+		"configuration": {
+			"properties": {
+				"tspec-runner.enableCodeLens": {
+					"type": "boolean",
+					"default": true
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
