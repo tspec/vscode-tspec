@@ -1,0 +1,43 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "tspec",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#tables"
+		},
+		{
+			"include": "#strings"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"name": "keyword.control.tspec",
+				"match": "^\\s*\\*"
+			}]
+		},
+		"tables": {
+			"patterns": [
+				{
+					"name": "keyword.other.tspec.table",
+					"match": "^\\s*\\|.*"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.tspec",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.tspec",
+					"match": "\\\\."
+				}
+			]
+		}
+	},
+	"scopeName": "text.html.markdown.tspec"
+}
