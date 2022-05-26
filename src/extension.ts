@@ -1,48 +1,40 @@
 import * as vscode from 'vscode';
-import { CodelensProvider, CodelensProvider2 } from './codelens_provider';
+import { CodelensRunSpecProvider, CodelensFormatProvider } from './codelens_providers';
 import { outputLogger } from './output_logger';
 
+// remove first and last pipe and trim, also last pipe is optional
 const tablePipes = /^\s*\|(.*?)\|?\s*$/;
 
-function isLine(text: string) : boolean {
-	for (const c of text) {
-		if (c !== '-') {
-			return false;
-		}		
-	}
-	return true;
-}
+const detectTableLine = /^\s*\|/;
 
 function formatTable(lines: vscode.TextLine[], edits: vscode.TextEdit[]) {
 	let table: string[][] = [];
 	let lens: number[] = [];
-	// for (let i = 0; i < lines.length; i++) {
-	// 	const line = lines[i];		
-	// }
-	// lines.forEach(tl => {
-	// 	let text = tl.text.trim();
-	// 	edits.push(vscode.TextEdit.replace(tl.range, `  ${text}`));
-	// });
-	lines.forEach((tl, j) => {
+
+	// First pass to find largest columns and populate table array
+	lines.forEach((tl, i) => {
 		let col: string[] = []
 		table.push(col);
-		if (j === 1) return;
-		const m = tablePipes.exec(tl.text); // remove first and last pipe
+
+		if (i === 1) return; // header line
+
+		const m = tablePipes.exec(tl.text);
 		if (m) {
 			let cols = m[1].split("|");
-			cols.forEach((c, i) => {
+			cols.forEach((c, j) => {
 				const colText = c.trim();
 				col.push(colText);
-				if (lens.length <= i) {
+				if (lens.length <= j) {
 					lens.push(0);
 				}
-				if (lens[i] < colText.length) {
-					lens[i] = colText.length;
+				if (lens[j] < colText.length) {
+					lens[j] = colText.length;
 				}
 			});
 		}
 	});
 
+	// Second pass to format
 	lines.forEach((tl, i) => {
 		let text = "  |";
 		let cols = table[i];
@@ -68,12 +60,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	outputLogger.log("Activating Tspec Runner...");
 
-	outputLogger.log("Registering codelens provider.");
+	outputLogger.log("Registering codelens providers.");
 
-	const clp = new CodelensProvider();
-	const clp2 = new CodelensProvider2();
-	vscode.languages.registerCodeLensProvider('tspec', clp2);
-	vscode.languages.registerCodeLensProvider('tspec', clp);
+	vscode.languages.registerCodeLensProvider('tspec', new CodelensFormatProvider());
+	vscode.languages.registerCodeLensProvider('tspec', new CodelensRunSpecProvider());
 
 	outputLogger.log("Registering commands.");
 
@@ -90,12 +80,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	}));
 
-	vscode.languages.registerDocumentFormattingEditProvider('tspec', {
+	outputLogger.log("Registering formatting provider.");
+
+	context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('tspec', {
 		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
 
 			const edits: vscode.TextEdit[] = [];
-
-			const detect = /^\s*\|/;
 
 			let table: vscode.TextLine[] = [];
 			let seen = false;
@@ -103,8 +93,7 @@ export function activate(context: vscode.ExtensionContext) {
 			for (let i = 0; i < document.lineCount; i++) {
 
 				const line = document.lineAt(i);
-
-				const isTableLine = detect.test(line.text);
+				const isTableLine = detectTableLine.test(line.text);
 
 				if (isTableLine) {
 					if (!seen) {
@@ -121,13 +110,14 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 
+			// Bottom of document, no more lines to unset 'seen'
 			if (seen) {
 				formatTable(table, edits);
 			}
 
 			return edits;
 		}
-	});
+	}));
 
 	outputLogger.log("Activation complete.");
 }

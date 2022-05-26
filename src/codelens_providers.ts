@@ -1,18 +1,28 @@
 import * as vscode from 'vscode';
 
-export class CodelensProvider implements vscode.CodeLensProvider {
+export class CodelensRunSpecProvider implements vscode.CodeLensProvider {
 
     private codeLenses: vscode.CodeLens[] = [];
+    private titles: RegExp = /^\s*##.+/;
 
     public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
         this.codeLenses = [];
         
-        const cl = new vscode.CodeLens(new vscode.Range(
+        const top = new vscode.CodeLens(new vscode.Range(
             new vscode.Position(0, 1),
             new vscode.Position(0, 1)
         ));
 
-        this.codeLenses.push(cl);
+        this.codeLenses.push(top);
+
+        for (let i = 0; i < document.lineCount; i++) {
+            const line = document.lineAt(i);
+            const isTitle = this.titles.test(line.text);
+
+            if (isTitle) {
+                this.codeLenses.push(new vscode.CodeLens(line.range));
+            }
+        }
 
         return this.codeLenses;
     }
@@ -29,7 +39,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
     
 }
 
-export class CodelensProvider2 implements vscode.CodeLensProvider {
+export class CodelensFormatProvider implements vscode.CodeLensProvider {
 
     private codeLenses: vscode.CodeLens[] = [];
 

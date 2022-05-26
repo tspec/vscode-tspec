@@ -5,14 +5,16 @@ Tspec Structured Plain Embedded Commands is a simple specification for writing t
 ## Features
 
 * Runs your custom task on a 'tspec' file.
-* 'Run Spec' Codelens action on top of the file.
+* _Run Spec_ Codelens action on top of the file.
 * Format tables in document (using format document command).
-* 'Format' codelens on top of tables.
+* _Format_ codelens on top of tables.
+* Syntax highlighting for commands, tables and headers
 
 ## Known Issues
 
 * Format codelens on tables formats the entire document instead of just the table
   under the codelens.
+* Run Spec codelens runs on the entire file even though it might appear on titles.
 
 ## Requirements
 
@@ -50,8 +52,18 @@ Example `tasks.json` for dotnet implementation of tspec:
 
 This is a preview release with limited functionality.
 
+### 0.0.3
+
+* Highlight headlines e.g. hash and double-hash lines.
+* Highlight _tags:_ and _vars:_ keywords (not defined by the spec yet).
+* _Run Spec_ codelens to be placed on titles.
+
+### 0.0.2
+
+* Document formatting.
+
 ### 0.0.1
 
-Initial release.
+* Initial release.
 
 **Enjoy!**

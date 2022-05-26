@@ -14,10 +14,20 @@
 	],
 	"repository": {
 		"keywords": {
-			"patterns": [{
-				"name": "keyword.control.tspec",
-				"match": "^\\s*\\*"
-			}]
+			"patterns": [
+				{
+					"name": "keyword.control.tspec",
+					"match": "^\\s*\\*"
+				},
+				{
+					"name": "keyword.other.unit.tspec",
+					"match": "^\\s*(?:tags|var):"
+				},
+				{
+					"name": "keyword.other.tspec.table",
+					"match": "^\\s*##?"
+				}
+			]
 		},
 		"tables": {
 			"patterns": [
